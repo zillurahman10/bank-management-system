@@ -45,20 +45,26 @@ class User:
         self.bank.create_account(name, email, address, account_type)
 
     def deposit(self, account_number, amount):
-        self.bank.accounts[account_number]['balance'] += amount
-        self.bank.total_available_balance += amount
-        print("Your money is diposited successfully !!")
-        self.bank.accounts[account_number]["transaction_history"].append(f"Deposited: {amount}")
+        if self.bank.accounts[account_number]:   
+            self.bank.accounts[account_number]['balance'] += amount
+            self.bank.total_available_balance += amount
+            print("Your money is diposited successfully !!")
+            self.bank.accounts[account_number]["transaction_history"].append(f"Deposited: {amount}")
+        else:
+            print("Account does not exist")
 
     def withdraw(self, account_number, amount):
         if self.bank.is_bankrupt == False:
-            if self.bank.accounts[account_number]['balance'] >= amount :
-                self.bank.accounts[account_number]['balance'] -= amount
-                self.bank.total_available_balance -= amount
-                print(f"Here is your money: {amount}")
-                self.bank.accounts[account_number]['transaction_history'].append(f"Withdrawn: {amount}")
+            if self.bank.accounts[account_number]:
+                if self.bank.accounts[account_number]['balance'] >= amount :
+                    self.bank.accounts[account_number]['balance'] -= amount
+                    self.bank.total_available_balance -= amount
+                    print(f"Here is your money: {amount}")
+                    self.bank.accounts[account_number]['transaction_history'].append(f"Withdrawn: {amount}")
+                else:
+                    print("Withdrawal amount exceeded")
             else:
-                print("Withdrawal amount exceeded")
+                print("Account does not exist")
         else:
             print("The bank is bankrupt !!")
 
